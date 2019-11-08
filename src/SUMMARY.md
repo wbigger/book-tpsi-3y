@@ -1,1 +1,1 @@
-SUMMARY-indire.md
+SUMMARY-generic.md
