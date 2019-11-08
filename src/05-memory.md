@@ -239,7 +239,7 @@ Quella che vediamo qui è un indirizzo riferito ad una __memoria virtuale__. Tra
 
 Perché questa mappatura? Ci sono molte e valide ragioni. Una di queste è ridurre la frammentazione della memoria centrale, in modo che la RAM sia sfruttata nel modo più efficiente possibile. Un'altra ragione è poter caricare in memoria solo alcune parti dell'eseguibile, quelle che stiamo usando, e lasciare le altre sull'hard-disk. Tutto questo senza disturbare lo sviluppatore, che all'interno del suo processo vede sempre gli stessi indirizzi di memoria.
 
-Per design del kernel, dal nostro applicativo non abbiamo nessun modo di sapere in quale  che ha diverse ed importanti funzioni. In questo momento non ci soffermeremo sulla memoria virtuale, che pure ha un importanza fondamentale in programmazione.
+Per design del kernel, dall'interno del nostro applicativo non abbiamo nessun modo di sapere a quale indirizzo fisico corrisponde un certo indirizzo reale. In effetti, questa informazione non ha alcuna utilità per uno sviluppatore, e potrebbe essere utilizzata in maniera pericolosa da un malintenzionato.  
 
 > Per approfondimenti, consultate le pagine da 259 in poi del vostro libro
 
