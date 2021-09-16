@@ -1,4 +1,4 @@
-# MPU vs CPU
+# MCU vs CPU
 
 Prima di cominciare, cerchiamo di capire il contesto in cui ci troviamo.
 
