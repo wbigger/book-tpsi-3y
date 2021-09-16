@@ -25,7 +25,7 @@ memoria secondaria (SDCard) -- ./memory --> memoria centrale (RAM)
 
 La domanda è: quale indirizzo di memoria ci assegna il kernel?
 
-### Allocazione dinamica della memoria centrale
+### Allocazione della memoria centrale
 Dove il nostro eseguibile verrà caricato in memoria, dipende da tante cose e ci possono essere varie strategie di assegnazione. L'assegnazione della memoria viene detta in termini tecnici __allocazione__.
 
 La soluzione più semplice è che il kernel ci assegni la prima zona di memoria disponibile che sia abbastanza grande da contenere il processo. Questa è una soluzione molto usata, e viene detta __first-fit__. Questa è anche stata la vostra scelta durante la simulazione alla lavagna con i post-it.
@@ -239,7 +239,7 @@ Quella che vediamo qui è un indirizzo riferito ad una __memoria virtuale__. Tra
 
 Perché questa mappatura? Ci sono molte e valide ragioni. Una di queste è ridurre la frammentazione della memoria centrale, in modo che la RAM sia sfruttata nel modo più efficiente possibile. Un'altra ragione è poter caricare in memoria solo alcune parti dell'eseguibile, quelle che stiamo usando, e lasciare le altre sull'hard-disk. Tutto questo senza disturbare lo sviluppatore, che all'interno del suo processo vede sempre gli stessi indirizzi di memoria.
 
-Per design del kernel, dal nostro applicativo non abbiamo nessun modo di sapere in quale  che ha diverse ed importanti funzioni. In questo momento non ci soffermeremo sulla memoria virtuale, che pure ha un importanza fondamentale in programmazione.
+Per design del kernel, dall'interno del nostro applicativo non abbiamo nessun modo di sapere a quale indirizzo fisico corrisponde un certo indirizzo reale. In effetti, questa informazione non ha alcuna utilità per uno sviluppatore, e potrebbe essere utilizzata in maniera pericolosa da un malintenzionato.  
 
 > Per approfondimenti, consultate le pagine da 259 in poi del vostro libro
 
@@ -297,9 +297,9 @@ Mh... la zona di memoria è completamente diversa, mooolto più bassa rispetto a
 
 L'indirizzo di memoria di `main` punta alle istruzioni in assembly per il processore, quelle che si trovano nella sezione `.text` che abbiamo analizzato con `objdump`. Nel momento in cui lanciamo l'eseguibile c'è solo questa sezione.
 
-Le variabili `a` e `b` vengono allocate durante l'esecuzione del processo, e il relativo spazio di allocazione viene detto __memoria dinamica__.
+Le variabili `a` e `b` vengono allocate durante l'esecuzione del processo.
 
-La sezione di memoria dinamica dove vengono create queste variabili viene detta `.stack`, che si può tradurre in "catasta". Questo nome deriva dal fatto che le variabili (e le funzioni) si "accatastano" una sopra l'altra, e si possono togliere solo dall'alto: in altre parole, non si può togliere (cioè eliminare/liberare/deallocare) una variabile nel mezzo della stack. In termini tecnici, viene chiamata una memoria FILO (First-In-Last-Out).
+La sezione di memoria dove vengono create queste variabili viene detta `.stack`, che si può tradurre in "catasta". Questo nome deriva dal fatto che le variabili (e le funzioni) si "accatastano" una sopra l'altra, e si possono togliere solo dall'alto: in altre parole, non si può togliere (cioè eliminare/liberare/deallocare) una variabile nel mezzo della stack. In termini tecnici, viene chiamata una memoria FILO (First-In-Last-Out).
 
 <p align="center">
 <img title='stack logo' src='./assets/stack-logo.jpg' width='30%'><br>
@@ -323,4 +323,4 @@ Per esattezza, i valori definiti da `❤️gcc❤️` sono i seguenti:
 <img title='stackoveflow logo' src='./assets/stackoverflow.png' width='25%' style="padding: 0 0 0 0;"><br>
 </p>
 
-> Esiste un'altra sezione di memoria dinamica, chiamata `.heap`: è una zona di memoria dove si possono allocare e liberare variabili in maniera programmatica. Uno dei problemi più frequenti con la `.heap` è che qualche variabile può rimanere in memoria anche quando non viene più usata, occupando spazio inutile; questo problema è noto come `memory leak`.
+> Esiste un'altra sezione di memoria, chiamata `.heap` (o memoria dinamica): è una zona di memoria dove si possono allocare e liberare variabili in maniera programmatica. Uno dei problemi più frequenti con la `.heap` è che qualche variabile può rimanere in memoria anche quando non viene più usata, occupando spazio inutile; questo problema è noto come `memory leak`.
