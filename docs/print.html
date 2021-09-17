@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -7,22 +7,36 @@
         
         <meta name="robots" content="noindex" />
         
+        
+
+
+        <!-- Custom HTML head -->
+        
+
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Materiale di supporto alle lezioni.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
         <link rel="shortcut icon" href="favicon.png">
+        
         <link rel="stylesheet" href="css/variables.css">
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
+        
         <link rel="stylesheet" href="css/print.css" media="print">
+        
 
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
 
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
@@ -34,11 +48,11 @@
 
         
     </head>
-    <body class="light">
+    <body>
         <!-- Provide site root to javascript -->
         <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = "light";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
@@ -62,8 +76,11 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            document.body.className = theme;
-            document.querySelector('html').className = theme + ' js';
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -80,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li><a href="index.html"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li><a href="01-mpu-cpu.html"><strong aria-hidden="true">2.</strong> MPU vs CPU</a></li><li><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li><a href="03-gnu.html"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="affix"><a href="assets/objdump.html">objdump</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li class="chapter-item expanded "><a href="01-mcu-cpu.html"><strong aria-hidden="true">2.</strong> MCU vs CPU</a></li><li class="chapter-item expanded "><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li class="chapter-item expanded "><a href="03-gnu.html"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li class="chapter-item expanded "><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li class="chapter-item expanded "><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="assets/objdump.html">objdump</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -89,37 +106,38 @@
 
             <div class="page">
                 
-                <div id="menu-bar" class="menu-bar">
-                    <div id="menu-bar-sticky-container">
-                        <div class="left-buttons">
-                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                                <i class="fa fa-paint-brush"></i>
-                            </button>
-                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                            </ul>
-                            
-                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                                <i class="fa fa-search"></i>
-                            </button>
-                            
-                        </div>
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
 
-                        <h1 class="menu-title">TPSI - Sistemi operativi con Raspberry PI 3</h1>
+                    <h1 class="menu-title">TPSI - Sistemi operativi con Raspberry PI 3</h1>
 
-                        <div class="right-buttons">
-                            <a href="print.html" title="Print this book" aria-label="Print this book">
-                                <i id="print-button" class="fa fa-print"></i>
-                            </a>
-                            
-                        </div>
+                    <div class="right-buttons">
+                        
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
                     </div>
                 </div>
 
@@ -159,7 +177,7 @@
 <p>Approfondimenti facoltativi sono in box come questo.</p>
 </blockquote>
 <p>Buon lavoro.</p>
-<h1><a class="header" href="#mpu-vs-cpu" id="mpu-vs-cpu">MPU vs CPU</a></h1>
+<h1><a class="header" href="#mcu-vs-cpu" id="mcu-vs-cpu">MCU vs CPU</a></h1>
 <p>Prima di cominciare, cerchiamo di capire il contesto in cui ci troviamo.</p>
 <h2><a class="header" href="#tutti-i-computer-hanno-un-sistema-operativo" id="tutti-i-computer-hanno-un-sistema-operativo">Tutti i computer hanno un sistema operativo?</a></h2>
 <p>Short answer: no 🙂</p>
@@ -436,7 +454,7 @@ Ora vediamo che lo stato del processo è cambiato, si trova in stato `S`, che co
 <pre><code>memoria secondaria (SDCard) -- ./memory --&gt; memoria centrale (RAM)
 </code></pre>
 <p>La domanda è: quale indirizzo di memoria ci assegna il kernel?</p>
-<h3><a class="header" href="#allocazione-dinamica-della-memoria-centrale" id="allocazione-dinamica-della-memoria-centrale">Allocazione dinamica della memoria centrale</a></h3>
+<h3><a class="header" href="#allocazione-della-memoria-centrale" id="allocazione-della-memoria-centrale">Allocazione della memoria centrale</a></h3>
 <p>Dove il nostro eseguibile verrà caricato in memoria, dipende da tante cose e ci possono essere varie strategie di assegnazione. L'assegnazione della memoria viene detta in termini tecnici <strong>allocazione</strong>.</p>
 <p>La soluzione più semplice è che il kernel ci assegni la prima zona di memoria disponibile che sia abbastanza grande da contenere il processo. Questa è una soluzione molto usata, e viene detta <strong>first-fit</strong>. Questa è anche stata la vostra scelta durante la simulazione alla lavagna con i post-it.</p>
 <p>Un'altra soluzione potrebbe essere cercare in memoria uno spazio delle dimensioni più simili al processo che devo caricare, in modo da ridurre la <em>frammentazione</em>: in questo caso si parla di <strong>best-fit</strong>.</p>
@@ -610,7 +628,7 @@ posizione in memoria di a: 0x7e8591ec
 <h3><a class="header" href="#memoria-virtuale-e-memoria-fisica" id="memoria-virtuale-e-memoria-fisica">Memoria virtuale e memoria fisica</a></h3>
 <p>Quella che vediamo qui è un indirizzo riferito ad una <strong>memoria virtuale</strong>. Tra la memoria virtuale e quella fisica c'è una mappatura, che associa ad ogni indirizzo della memoria virtuale un indirizzo della memoria fisica.</p>
 <p>Perché questa mappatura? Ci sono molte e valide ragioni. Una di queste è ridurre la frammentazione della memoria centrale, in modo che la RAM sia sfruttata nel modo più efficiente possibile. Un'altra ragione è poter caricare in memoria solo alcune parti dell'eseguibile, quelle che stiamo usando, e lasciare le altre sull'hard-disk. Tutto questo senza disturbare lo sviluppatore, che all'interno del suo processo vede sempre gli stessi indirizzi di memoria.</p>
-<p>Per design del kernel, dal nostro applicativo non abbiamo nessun modo di sapere in quale  che ha diverse ed importanti funzioni. In questo momento non ci soffermeremo sulla memoria virtuale, che pure ha un importanza fondamentale in programmazione.</p>
+<p>Per design del kernel, dall'interno del nostro applicativo non abbiamo nessun modo di sapere a quale indirizzo fisico corrisponde un certo indirizzo reale. In effetti, questa informazione non ha alcuna utilità per uno sviluppatore, e potrebbe essere utilizzata in maniera pericolosa da un malintenzionato.</p>
 <blockquote>
 <p>Per approfondimenti, consultate le pagine da 259 in poi del vostro libro</p>
 </blockquote>
@@ -657,8 +675,8 @@ posizione in memoria di main: 0x00010440
 </code></pre>
 <p>Mh... la zona di memoria è completamente diversa, mooolto più bassa rispetto alle altre. Che sta succedendo?</p>
 <p>L'indirizzo di memoria di <code>main</code> punta alle istruzioni in assembly per il processore, quelle che si trovano nella sezione <code>.text</code> che abbiamo analizzato con <code>objdump</code>. Nel momento in cui lanciamo l'eseguibile c'è solo questa sezione.</p>
-<p>Le variabili <code>a</code> e <code>b</code> vengono allocate durante l'esecuzione del processo, e il relativo spazio di allocazione viene detto <strong>memoria dinamica</strong>.</p>
-<p>La sezione di memoria dinamica dove vengono create queste variabili viene detta <code>.stack</code>, che si può tradurre in &quot;catasta&quot;. Questo nome deriva dal fatto che le variabili (e le funzioni) si &quot;accatastano&quot; una sopra l'altra, e si possono togliere solo dall'alto: in altre parole, non si può togliere (cioè eliminare/liberare/deallocare) una variabile nel mezzo della stack. In termini tecnici, viene chiamata una memoria FILO (First-In-Last-Out).</p>
+<p>Le variabili <code>a</code> e <code>b</code> vengono allocate durante l'esecuzione del processo.</p>
+<p>La sezione di memoria dove vengono create queste variabili viene detta <code>.stack</code>, che si può tradurre in &quot;catasta&quot;. Questo nome deriva dal fatto che le variabili (e le funzioni) si &quot;accatastano&quot; una sopra l'altra, e si possono togliere solo dall'alto: in altre parole, non si può togliere (cioè eliminare/liberare/deallocare) una variabile nel mezzo della stack. In termini tecnici, viene chiamata una memoria FILO (First-In-Last-Out).</p>
 <p align="center">
 <img title='stack logo' src='./assets/stack-logo.jpg' width='30%'><br>
 <i>Immagine presa dal gioco 'Stack' di Ketchapp. Tutti i diritti riservati.</i>
@@ -683,7 +701,7 @@ posizione in memoria di main: 0x00010440
 </blockquote>
 </p>
 <blockquote>
-<p>Esiste un'altra sezione di memoria dinamica, chiamata <code>.heap</code>: è una zona di memoria dove si possono allocare e liberare variabili in maniera programmatica. Uno dei problemi più frequenti con la <code>.heap</code> è che qualche variabile può rimanere in memoria anche quando non viene più usata, occupando spazio inutile; questo problema è noto come <code>memory leak</code>.</p>
+<p>Esiste un'altra sezione di memoria, chiamata <code>.heap</code> (o memoria dinamica): è una zona di memoria dove si possono allocare e liberare variabili in maniera programmatica. Uno dei problemi più frequenti con la <code>.heap</code> è che qualche variabile può rimanere in memoria anche quando non viene più usata, occupando spazio inutile; questo problema è noto come <code>memory leak</code>.</p>
 </blockquote>
 <pre><code>$ cat objdump.txt
 
@@ -789,7 +807,30 @@ int main(void) {
         </div>
 
         
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3000/__livereload");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
 
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
         
 
         

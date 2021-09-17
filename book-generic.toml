@@ -4,5 +4,5 @@ author = "Claudio Capobianco"
 description = "Materiale di supporto alle lezioni."
 
 [build]
-build-dir = "book-3Binf"
+build-dir = "docs"
 create-missing = true
