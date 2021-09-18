@@ -1,8 +1,0 @@
-[book]
-title = "TPSI - Sistemi operativi con Raspberry PI 3"
-author = "Claudio Capobianco"
-description = "Materiale di supporto alle lezioni."
-
-[build]
-build-dir = "docs"
-create-missing = true
