@@ -1,8 +1,1 @@
-[book]
-title = "TPSI - Terzo anno"
-author = ["Claudio Capobianco"]
-description = "Materiale di supporto alle lezioni."
-
-[build]
-build-dir = "docs"
-create-missing = true
+book-generic.toml

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Sistemi Operativi - TPSI - Sistemi operativi con Raspberry PI 3</title>
+        <title>MPU vs CPU - TPSI - Sistemi operativi con Raspberry PI 3</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -78,7 +78,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li><a href="index.html" class="active"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li><a href="01-mpu-cpu.html"><strong aria-hidden="true">2.</strong> MPU vs CPU</a></li><li><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li><a href="03-gnu.html"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="affix"><a href="assets/objdump.html">objdump</a></li></ol>
+                <ol class="chapter"><li><a href="index.html"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li><a href="01-mpu-cpu.html" class="active"><strong aria-hidden="true">2.</strong> MPU vs CPU</a></li><li><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li><a href="03-gnu.html"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="affix"><a href="assets/objdump.html">objdump</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,27 +145,40 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#sistemi-operativi-con-raspberry-pi-3" id="sistemi-operativi-con-raspberry-pi-3">Sistemi Operativi con Raspberry PI 3</a></h1>
-<p><strong>A.S. 2017-2018</strong></p>
-<p><strong>Istituto di Istruzione Superiore G. Marconi</strong></p>
-<p><strong>Tecnologie e Progettazione di Sistemi Informatici</strong></p>
-<p><strong>Prof. Claudio Capobianco</strong></p>
-<p>Buongiorno ragazzi,</p>
-<p>questo materiale riepiloga quanto detto a lezione nelle scorse settimane.</p>
-<p>Le risposte alle domande dei compiti in classe sono tutte incluse in questo materiale.</p>
-<blockquote>
-<p>Approfondimenti facoltativi sono in box come questo.</p>
-</blockquote>
-<p>Buon lavoro.</p>
+                        <h1><a class="header" href="#mpu-vs-cpu" id="mpu-vs-cpu">MPU vs CPU</a></h1>
+<p>Prima di cominciare, cerchiamo di capire il contesto in cui ci troviamo.</p>
+<h2><a class="header" href="#tutti-i-computer-hanno-un-sistema-operativo" id="tutti-i-computer-hanno-un-sistema-operativo">Tutti i computer hanno un sistema operativo?</a></h2>
+<p>Short answer: no 🙂</p>
+<p>Long answer:</p>
+<p>Il sistema operativo gestisce le risorse della macchina (memoria, processore, periferiche) per permettere a più applicazioni di poter funzionare contemporaneamente. Ma ogni cosa ha un suo costo: il sistema operativo, come ben sappiamo, utilizza per sé stesso una porzione a volte considerevole delle riorse stesse del nostro computer: pensiamo a quanti GB sul disco occupa una installazione di Windows o Mac, a quanta memoria occupa, e che ha volte i loro processi impegnano la CPU senza una ragione apparente. Oltre a questo pensiamo a problemi di vulnerabilità, aggiornamento, etc.</p>
+<p>Se noi vogliamo far girare un solo programma sul computer, possiamo non aver bisogno di un sistema operativo. Tipicamente quest accade per piccoli elaboratori per compiti molto specifici: questo sistemi vengono chiamati <em>embedded</em>.</p>
+<h2><a class="header" href="#qualche-esempio-di-computer-con-e-senza-os" id="qualche-esempio-di-computer-con-e-senza-os">Qualche esempio di computer con e senza OS?</a></h2>
+<p>In generale, tutti i computer con una interfaccia grafica sono progettati per fare più cose contemporaneamente, ed hanno un sistema operativo: pensiamo ad esempio ai nostri computer desktop, laptop, smartphone. Anche i web server sparsi per il mondo fanno tante cose insieme, ed hanno un sistema operativo.</p>
+<p>Le cose diventano un po' più complicate quando parliamo di piccoli computer su una sola scheda, chiamati appunti <em>single-board computer</em>. In classe abbiamo visto diversi tipi di queste schede:</p>
+<p align="center">
+<img title="mpu-cpu" src='./assets/mpu-cpu.jpg' width='70%'>
+</p>
+<p>A sinistra c'è una Raspberry PI 3 (con il case), a destra in alto un Intel Galileo, sotto un Arduino. Le prime due hanno un sistema operativo, la terza no.</p>
+<h2><a class="header" href="#e-possibile-distinguere-visivamente-se-un-computer-ha-un-os" id="e-possibile-distinguere-visivamente-se-un-computer-ha-un-os">E' possibile distinguere visivamente se un computer ha un OS?</a></h2>
+<p>Di solito sì, perché l'architettura e la disposizione dei componenti sulla scheda è diversa.</p>
+<p>Per i computer senza OS, i componenti base di un elaboratore sono su un unico chip, che viene chiamato <em>microcontollore</em>, abbreviato in <strong>MCU</strong> (Microcontroller Unit):  unità di elaborazione (processore), memoria volatile (RAM) e memoria a lungo termine. Nella foto di Arduino, è quel chip rettangolare lungo con tanti piedini su due lati.</p>
+<p>Per i computer con OS, i componenti solitamente sono su chip separati. Il chip dedicato all'elaborazione viene chiamato <em>microprocessore</em>, abbreviato in <strong>CPU</strong> (Central Processing Unit). Come dice il nome, la CPU è specifica per il processamento dei dati ed è &quot;centrale&quot;, rispetto agli altri componenti collegati ad esso. Nella Raspberry nella foto, la CPU è quella sotto il foro circolare. La RAM è nella parte inferiore della scheda e la memoria a lungo termine è nella scheda microSD estraibile.</p>
+<h2><a class="header" href="#il-sistema-operativo-è-legato-al-tipo-di-cpu" id="il-sistema-operativo-è-legato-al-tipo-di-cpu">Il sistema operativo è legato al tipo di CPU?</a></h2>
+<p>Come per ogni domanda in questo ambito così complesso, la risposta comincia con...dipende!</p>
+<p>Il sistema operativo è un programma estremamente complesso, e si può dividere in diverse componenti. Solo quelli più vicini all'hardware dipendono dalla CPU, dal tipo di RAM e da tutti i componenti e le periferiche.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="01-mpu-cpu.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="02-kernel.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -177,9 +190,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a href="01-mpu-cpu.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="02-kernel.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

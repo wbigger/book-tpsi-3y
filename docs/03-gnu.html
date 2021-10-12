@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Sistemi Operativi - TPSI - Sistemi operativi con Raspberry PI 3</title>
+        <title>GNU utils - TPSI - Sistemi operativi con Raspberry PI 3</title>
         
 
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
@@ -78,7 +78,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li><a href="index.html" class="active"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li><a href="01-mpu-cpu.html"><strong aria-hidden="true">2.</strong> MPU vs CPU</a></li><li><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li><a href="03-gnu.html"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="affix"><a href="assets/objdump.html">objdump</a></li></ol>
+                <ol class="chapter"><li><a href="index.html"><strong aria-hidden="true">1.</strong> Sistemi Operativi</a></li><li><a href="01-mpu-cpu.html"><strong aria-hidden="true">2.</strong> MPU vs CPU</a></li><li><a href="02-kernel.html"><strong aria-hidden="true">3.</strong> Kernel</a></li><li><a href="03-gnu.html" class="active"><strong aria-hidden="true">4.</strong> GNU utils</a></li><li><a href="04-scheduler.html"><strong aria-hidden="true">5.</strong> Scheduler</a></li><li><a href="05-memory.html"><strong aria-hidden="true">6.</strong> Memoria</a></li><li class="spacer"></li><li class="affix"><a href="assets/objdump.html">objdump</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,27 +145,68 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1><a class="header" href="#sistemi-operativi-con-raspberry-pi-3" id="sistemi-operativi-con-raspberry-pi-3">Sistemi Operativi con Raspberry PI 3</a></h1>
-<p><strong>A.S. 2017-2018</strong></p>
-<p><strong>Istituto di Istruzione Superiore G. Marconi</strong></p>
-<p><strong>Tecnologie e Progettazione di Sistemi Informatici</strong></p>
-<p><strong>Prof. Claudio Capobianco</strong></p>
-<p>Buongiorno ragazzi,</p>
-<p>questo materiale riepiloga quanto detto a lezione nelle scorse settimane.</p>
-<p>Le risposte alle domande dei compiti in classe sono tutte incluse in questo materiale.</p>
+                        <h1><a class="header" href="#gnu-utils" id="gnu-utils">GNU Utils</a></h1>
+<p>Per poter usare in maniera le chiamate di sistema che ci mette a disposizione il kernel, ci sono una serie di strumenti che ci facilitano i compito. Per Linux, queste utiità sono state sviluppate dal <a href="www.gnu.org">progetto GNU</a>, e si chiamano <strong>GNU coreutils</strong>.</p>
 <blockquote>
-<p>Approfondimenti facoltativi sono in box come questo.</p>
+<p>Il progetto GNU è stato fondato nel 1983 da Richard Stallman, al MIT di Boston. GNU ha lo scopo in primo luogo di permettere agli sviluppatori di tutto il mondo di poter sviluppare <em>liberamente</em> software, ovvero avendo a disposizione il codice sorgente dei programmi di altre aziende che usano, e senza la necessità di pagare licenze. Le utilità che useremo in questo corso sono solo parte del progetto; un'altra parte fondamentale è la licenza che permette al software di essere usato legalmente, rispettando le libertà fondamentali del free software. Il nome di questa licenza è GPL (General Public Licence), di cui l'ultima versione è la <a href="https://www.gnu.org/licenses/gpl.html">GPLv3</a> <p align="center"><a href='https://www.gnu.org/licenses/gpl.html'><img src='./assets/gpl.png' width='200px'></a></p></p>
 </blockquote>
-<p>Buon lavoro.</p>
+<p>Anche in questo caso possiamo andare a cercare il <a href="http://git.savannah.gnu.org/cgit/coreutils.git">codice sorgente</a> delle coreutils.</p>
+<p align="center">
+<img title='GNU coreutils summary' src='./assets/gnu-summary.png'>
+</p>
+<p>Andando a vedere il codice sorgente nella tab &quot;tree&quot;, ed entrando nella cartella <code>src</code>, potete trovare il codice sorgente di tutti i comandi che ci sono familiari e su cui avete fatto la ricerca.</p>
+<p align="center">
+<img title='GNU coreutils summary' src='./assets/gnu-summary.png'>
+</p>
+<h2><a class="header" href="#extra-ricompilare-le-gnu-coreutils" id="extra-ricompilare-le-gnu-coreutils">Extra: ricompilare le GNU coreutils</a></h2>
+<p>Questo non fa strettamente parte di questa unità didattica, ma ve la lascio in caso qualcuno di voi voglia fare degli esperimenti.</p>
+<p>Se volete modificare le GNU coreutils, ad esempio per cambiare il funzionamento di <code>ls</code> o <code>yes</code>, potete farlo seguendo le istruzioni qui sotto.</p>
+<ol>
+<li>accedere al terminale della vostra Raspberry</li>
+<li>abilitare il download dei sorgenti da /etc/apt/sources.list, togliendo il commento all'ultima riga</li>
+<li>creare ed entrare in una cartella separata</li>
+</ol>
+<pre><code> mkdir coreutils-src
+ cd coreutils-src
+</code></pre>
+<ol>
+<li>scaricare i sorgenti e scompattarli</li>
+</ol>
+<pre><code>apt-get source coreutils
+tar xvf coreutils_*.orig.tar.xz
+</code></pre>
+<ol>
+<li>entrare dentro la cartella <code>src</code>, all'interno possiamo vedere i sorgenti dei vari comandi.</li>
+</ol>
+<pre><code>cd src
+</code></pre>
+<h3><a class="header" href="#modificare-un-comando" id="modificare-un-comando">Modificare un comando</a></h3>
+<p>Possiamo provare a modificare il comando <code>yes</code>, che è uno dei più semplici. Modificare l'eseguibile in modo che invece di <code>yes</code>, stampi quello che volete.</p>
+<ol>
+<li>modificare il file <code>yes.c</code></li>
+<li>tornare alla root del progetto e ricompilare</li>
+</ol>
+<pre><code>cd ..
+./configure.sh
+make
+</code></pre>
+<p>Ora nella cartella <code>src</code> avete tutti gli eseguibili! Provate a lanciare yes e vedete se stampa quello che desiderate.</p>
+<pre><code>cd src
+./yes
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
+                            <a rel="prev" href="02-kernel.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
 
                         
-                            <a rel="next" href="01-mpu-cpu.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="04-scheduler.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -177,9 +218,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
+                    <a href="02-kernel.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
 
                 
-                    <a href="01-mpu-cpu.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="04-scheduler.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
